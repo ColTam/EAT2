@@ -1,0 +1,48 @@
+<RCC>
+    <qresource prefix="/icon">
+        <file>icon/file6.png</file>
+        <file>icon/file7.png</file>
+        <file>icon/file17.png</file>
+        <file>icon/file19.png</file>
+        <file>icon/14.png</file>
+        <file>icon/on.png</file>
+        <file>icon/off.png</file>
+        <file>icon/return.png</file>
+        <file>icon/close.png</file>
+        <file>icon/maximize.png</file>
+        <file>icon/minimize.png</file>
+        <file>icon/restore.png</file>
+        <file>icon/arrow_down.png</file>
+        <file>icon/arrow_down_black.png</file>
+        <file>icon/arrow_left.png</file>
+        <file>icon/arrow_right.png</file>
+        <file>icon/arrow_up.png</file>
+        <file>icon/checked.png</file>
+        <file>icon/checked_hover.png</file>
+        <file>icon/checked_pressed.png</file>
+        <file>icon/unchecked.png</file>
+        <file>icon/unchecked_hover.png</file>
+        <file>icon/unchecked_pressed.png</file>
+        <file>icon/checkedr.png</file>
+        <file>icon/checkedr_hover.png</file>
+        <file>icon/checkedr_pressed.png</file>
+        <file>icon/uncheckedr.png</file>
+        <file>icon/uncheckedr_hover.png</file>
+        <file>icon/uncheckedr_pressed.png</file>
+    </qresource>
+    <qresource prefix="/image">
+        <file>image/wlite.jpg</file>
+        <file>image/SGS.jpg</file>
+        <file>image/SGS01.jpg</file>
+        <file>image/help.png</file>
+        <file>image/help_first.png</file>
+        <file>image/help_second.png</file>
+        <file>image/SGS.png</file>
+        <file>image/help_third.png</file>
+    </qresource>
+    <qresource prefix="/other">
+        <file>zh_CN.qm</file>
+        <file>zh_CN.ts</file>
+        <file>dark.qss</file>
+    </qresource>
+</RCC>
