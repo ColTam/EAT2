@@ -128,7 +128,7 @@ protected:
 signals:
     void isSectionFileName(QString,int);        /*!* \brief 已选择的模块名称信号 */
     void tTimerStop(int,int);                   /*!* \brief 定时器停止信号 int为未工作模块数 */
-    void btn4Clicked();
+    void btn4Clicked();                         /*!* \brief 保存chua串口设置按钮按下信号 */
 
 public slots:
     void delItem(QListWidgetItem *item);        /*!* \brief 删除项目 */

@@ -13,9 +13,11 @@ mTestThread::mTestThread(QObject *parent)
     , oldNumberB("000000000064\r\n")
     , oldNumberC("000000000064\r\n")
     , _testClient(new QTcpSocket(this))
+    , _testIsConnected(false)
 {
-    _testClient->connectToHost(ZQWL_IP, ZQWL_PORT + devInformation.at(5).com);
-    connect(_testClient, &QTcpSocket::readyRead, [this](){ _data = _testClient->readAll(); });
+    connect(_testClient, &QTcpSocket::connected, [this](){ _testIsConnected = true; });
+    connect(_testClient, &QTcpSocket::disconnected, [this](){ _testIsConnected = false; });
+    connect(_testClient, &QTcpSocket::readyRead, [this](){ _data = _testClient->readAll();});
 }
 
 mTestThread::~mTestThread()
@@ -38,20 +40,34 @@ void mTestThread::updateTest()
     QString number;
 
     number = getData("RDWD020603");
-    if (number.size() != 13 || number.isEmpty()) {
+    if (number.size() != 12 || number.isEmpty()) {
         number = oldNumberA;
     }
     oldNumberA = number;
     number = getData("RDWD030603");
-    if (number.size() != 13 || number.isEmpty()) {
+    if (number.size() != 12 || number.isEmpty()) {
         number = oldNumberB;
     }
     oldNumberB = number;
     number = getData("RDWD040603");
-    if (number.size() != 13 || number.isEmpty()) {
+    if (number.size() != 12 || number.isEmpty()) {
         number = oldNumberC;
     }
     oldNumberC = number;
 
     emit testData(oldNumberA, oldNumberB, oldNumberC);
+}
+
+void mTestThread::connectZQWL()
+{
+    if (!_testIsConnected)
+        _testClient->connectToHost(ZQWL_IP, ZQWL_PORT + devInformation.at(5).com);
+}
+
+void mTestThread::disConnectZQWL()
+{
+    if (_testIsConnected)
+        _testClient->disconnectFromHost();
+
+    _testIsConnected = false;
 }

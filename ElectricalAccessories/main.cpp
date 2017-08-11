@@ -22,6 +22,7 @@
 #include <QSettings>
 #include <QDebug>
 #include <QFile>
+#include <QMessageBox>
 
 #pragma execution_character_set("utf-8")
 
@@ -30,6 +31,18 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("GBK"));
 
+    HANDLE m_hMutex  =  CreateMutex(NULL, FALSE,  L"844DBE1A-5029-4DE5-A088-4ED1529F9F63" );//防止程序二次启动(VC-GUID生成的编码 用于防止编码重复)
+    if  (GetLastError()  ==  ERROR_ALREADY_EXISTS)  {
+        CloseHandle(m_hMutex);
+        m_hMutex  =  NULL;
+        QMessageBox msgBox(QMessageBox::Warning,"error","The program is started, please do not restart");
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.setButtonText(QMessageBox::Ok,"Ok");
+        msgBox.setWindowIcon(QIcon(WINDOW_ICON));
+
+        msgBox.exec();
+        return 0;
+    }
     QFile qss(":/other/dark.qss");
     qss.open(QFile::ReadOnly);
     qApp->setStyleSheet(qss.readAll());
@@ -39,15 +52,15 @@ int main(int argc, char *argv[])
     //read setting .ini
     QSettings *configIniRead = new QSettings("EATconfig.ini", QSettings::IniFormat);//获取本地配置文件
 
-    QString voltageU    = configIniRead->value("Voltage Uart").toString();
-    QString TRU1        = configIniRead->value("Temperature Rise Uart1").toString();
-    QString TRU2        = configIniRead->value("Temperature Rise Uart2").toString();
-    QString LoadAU      = configIniRead->value("Load(ServoA) Uart").toString();
-    QString LoadBU      = configIniRead->value("Load(ServoB) Uart").toString();
-    QString LoadCU      = configIniRead->value("Load(ServoC) Uart").toString();
-    QString lifeTestU   = configIniRead->value("Life Tester Uart").toString();
-    QString path        = configIniRead->value("Default Path").toString();
-    int language        = configIniRead->value("Language").toInt();
+    QString voltageU = configIniRead->value("Voltage Uart").toString();
+    QString TRU1 = configIniRead->value("Temperature Rise Uart1").toString();
+    QString TRU2 = configIniRead->value("Temperature Rise Uart2").toString();
+    QString LoadAU = configIniRead->value("Load(ServoA) Uart").toString();
+    QString LoadBU = configIniRead->value("Load(ServoB) Uart").toString();
+    QString LoadCU = configIniRead->value("Load(ServoC) Uart").toString();
+    QString lifeTestU = configIniRead->value("Life Tester Uart").toString();
+    QString path = configIniRead->value("Default Path").toString();
+    int language = configIniRead->value("Language").toInt();
 
     //load language  cn/en
     QTranslator translator;
@@ -55,7 +68,7 @@ int main(int argc, char *argv[])
     if (language == 1) {//判断是否安装汉化包
         a.installTranslator( &translator );
     }
-    if (!voltageU.isEmpty()){//更新串口号
+    if (!voltageU.isEmpty()){//更新串口号到缓存
         comVolt  = voltageU.toInt();
     }
     if (!TRU1.isEmpty()){

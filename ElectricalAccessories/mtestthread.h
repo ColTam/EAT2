@@ -31,6 +31,8 @@ signals:
 
 public slots:
     void updateTest();       /*!* \brief 接收寿命测试机数据槽函数 */
+    void connectZQWL();
+    void disConnectZQWL();
 
 private:
     QString _data;
@@ -39,6 +41,8 @@ private:
     QString oldNumberC;     /*!* \brief  */
 
     QTcpSocket *_testClient;
+
+    bool _testIsConnected;
 };
 
 class testController : public QObject
@@ -56,6 +60,8 @@ public:
 
         connect(&workerThread, &QThread::finished, worker, &QObject::deleteLater);
         connect(this, &testController::testTimeout, worker, &mTestThread::updateTest);
+        connect(this, &testController::connectTestSignal, worker, &mTestThread::connectZQWL);
+        connect(this, &testController::disConnectTestSignal, worker, &mTestThread::disConnectZQWL);
         connect(worker, &mTestThread::testData, this, &testController::threadTestData);
 
         workerThread.start();
@@ -64,9 +70,16 @@ public:
         workerThread.quit();
         workerThread.wait();
     }
+
+public:
+    void connectTest() { emit connectTestSignal(); }//因本线程初始化在测试前，所以测试机串口号有可能被用户改动
+                                                    //用于测试前连接网段
+
 signals:
     void testTimeout();
     void threadTestData(const QString &, const QString &, const QString &);
+    void connectTestSignal();
+    void disConnectTestSignal();
 
 public Q_SLOTS:
     void threadTestTimerStart() { if(!_testTimer->isActive()) _testTimer->start(1000); }

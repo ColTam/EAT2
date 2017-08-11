@@ -66,7 +66,7 @@ class loadController : public QObject
 public:
     loadController(int uart) {
         _loadTimer = new QTimer(this);
-        connect(_loadTimer, &QTimer::timeout, this, &loadController::loadTimeout);
+        connect(_loadTimer, &QTimer::timeout, this, &loadController::loadTimeout);//通过定时器超时，触发线程处理新数据函数
 
         mLoadThread *worker = new mLoadThread(uart);
         worker->moveToThread(&workerThread);
@@ -85,7 +85,7 @@ signals:
     void loadTimeout();
     void threadLoadData(const QString &, const QString &);
 
-public Q_SLOTS:
+public Q_SLOTS://定时器供外部控制函数
     void threadLoadTimerStart(time_t msec) { if(!_loadTimer->isActive()) _loadTimer->start(msec); }
     void threadLoadTimerStop() { if(_loadTimer->isActive()) _loadTimer->stop(); }
 };

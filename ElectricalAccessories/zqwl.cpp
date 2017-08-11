@@ -2,6 +2,7 @@
 #include "Collect.h"
 
 #include <QTcpSocket>
+#include <QDebug>
 
 ZQWL::ZQWL(QObject *parent)
     : QObject(parent)

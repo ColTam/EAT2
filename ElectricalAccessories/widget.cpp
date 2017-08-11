@@ -44,10 +44,12 @@ Widget::Widget(QWidget *parent) :
     connect(_testController, &testController::threadTestData, this, &Widget::testData);
     connect(this, &Widget::testTimerStart, _testController, &testController::threadTestTimerStart);
     connect(this, &Widget::testTimerStop, _testController, &testController::threadTestTimerStop);
+    connect(this, &Widget::uartUpdate, _testController, &testController::disConnectTestSignal);
 
     connect(_trController, &trController::threadTrData, this, &Widget::tRCRData);
     connect(this, &Widget::tRCRTimerStart, _trController, &trController::threadTrTimerStart);
     connect(this, &Widget::tRCRTimerStop, _trController, &trController::threadTrTimerStop);
+    connect(this, &Widget::uartUpdate, _trController, &trController::disConnectTRSignal);
 }
 
 Widget::~Widget()
@@ -90,6 +92,7 @@ void Widget::initWidget()
     connect(_formDisplay, SIGNAL(isSectionFileName(QString,int)), this, SLOT(selectClause(QString,int)));
     connect(this, SIGNAL(finishedItem(QString, int)), _formDisplay, SLOT(finishedItem(QString, int)));
     connect(_formDisplay, SIGNAL(tTimerStop(int,int)), this, SLOT(tTimerStop(int,int)));
+    connect(_formDisplay, &FormDisplay::btn4Clicked, this, &Widget::uartUpdate);
 //    //use on test.
 //    LifeTesterDialog *lifeTesterDialogA = new LifeTesterDialog(NULL);
 //    lifeTesterDialogA->show();
@@ -240,6 +243,9 @@ void Widget::closeWidget()
 
 void Widget::selectClause(QString fileName, int iec)
 {
+    _testController->connectTest();
+    _trController->connectTR();
+
     mServo = fileName.right(2).mid(0, 1);
     if (mServo == "A") {
         mFileNameA = fileName;

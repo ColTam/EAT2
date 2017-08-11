@@ -58,6 +58,8 @@ signals:
     void testCThreadStart();            /*!* \brief  */
     void testCThreadStop();             /*!* \brief  */
 
+    void uartUpdate();                  /*!* \brief 串口已更新信号 */
+
 public slots:
     void closeWidget();                 /*!* \brief 关闭窗口 */
     void selectClause(QString fileName, int iec);/*!* \brief 已选择章节处理 */

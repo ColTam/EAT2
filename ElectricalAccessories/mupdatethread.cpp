@@ -13,7 +13,7 @@ mUpdateThread::mUpdateThread(QObject *parent)
 QString mUpdateThread::getData(const QString &text) const
 {
     _updateClient->write(text.toLatin1().data());
-    if (_updateClient->waitForReadyRead(2000)) {
+    if (_updateClient->waitForReadyRead(2000)) {//等待数据接收
         return socketData;
     }
 
@@ -22,6 +22,7 @@ QString mUpdateThread::getData(const QString &text) const
 
 void mUpdateThread::updateState()
 {
+    //逐一连接各端口，并发送、接收及储存端口对应串口下位机数据
     _updateClient->connectToHost(ZQWL_IP, ZQWL_PORT + comVolt);
     QString volt = getData("RDW VF");
 
@@ -31,7 +32,7 @@ void mUpdateThread::updateState()
     voltUart.com = comVolt;
     devInformation.insert(0,voltUart);
     _updateClient->disconnectFromHost();
-    _updateClient->waitForDisconnected();
+//    _updateClient->waitForDisconnected();
 
     _updateClient->connectToHost(ZQWL_IP, ZQWL_PORT + comTR_YOKOGAWAGP10);
     QString tc = getData("FData,0,0001,0110");
@@ -42,7 +43,7 @@ void mUpdateThread::updateState()
     trUart.com = comTR_YOKOGAWAGP10;
     devInformation.insert(1,trUart);
     _updateClient->disconnectFromHost();
-    _updateClient->waitForDisconnected();
+//    _updateClient->waitForDisconnected();
 
     _updateClient->connectToHost(ZQWL_IP, ZQWL_PORT + comLoadA);
     QString loadA = getData("RDM%101%102%\r");
@@ -53,7 +54,7 @@ void mUpdateThread::updateState()
     loadAUart.com = comLoadA;
     devInformation.insert(2,loadAUart);
     _updateClient->disconnectFromHost();
-    _updateClient->waitForDisconnected();
+//    _updateClient->waitForDisconnected();
 
     _updateClient->connectToHost(ZQWL_IP, ZQWL_PORT + comLoadB);
     QString loadB = getData("RDM%101%102%\r");
@@ -64,7 +65,7 @@ void mUpdateThread::updateState()
     loadBUart.com = comLoadB;
     devInformation.insert(3,loadBUart);
     _updateClient->disconnectFromHost();
-    _updateClient->waitForDisconnected();
+//    _updateClient->waitForDisconnected();
 
     _updateClient->connectToHost(ZQWL_IP, ZQWL_PORT + comLoadC);
     QString loadC = getData("RDM%101%102%\r");
@@ -75,7 +76,7 @@ void mUpdateThread::updateState()
     loadCUart.com = comLoadC;
     devInformation.insert(4,loadCUart);
     _updateClient->disconnectFromHost();
-    _updateClient->waitForDisconnected();
+//    _updateClient->waitForDisconnected();
 
     _updateClient->connectToHost(ZQWL_IP, ZQWL_PORT + comTest);
     QString testA = getData("RDWD020603");
@@ -102,7 +103,7 @@ void mUpdateThread::updateState()
     testCUart.com = comTest;
     devInformation.insert(7,testCUart);
     _updateClient->disconnectFromHost();
-    _updateClient->waitForDisconnected();
+//    _updateClient->waitForDisconnected();
 
     _updateClient->connectToHost(ZQWL_IP, ZQWL_PORT + comTR_AGILENT34970);
     QString tc2 = getData("FData,0,0001,0110");
@@ -113,5 +114,5 @@ void mUpdateThread::updateState()
     tr2Uart.com = comTR_AGILENT34970;
     devInformation.insert(8,tr2Uart);
     _updateClient->disconnectFromHost();
-    _updateClient->waitForDisconnected();
+//    _updateClient->waitForDisconnected();
 }
